@@ -4,6 +4,9 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+# En un clon limpio (o con carpetas montadas vacías) estas carpetas no existen y los notebooks fallarían al guardar gráficos.
+mkdir -p data/raw data/processed outputs/figures
+
 echo "== 1/4 Descarga de fuentes (data/raw)"
 python src/download.py
 

@@ -121,6 +121,8 @@ Luego ejecutar los notebooks **en orden**: `00_exploracion`, `00b_panel_base`, `
 
 Las versiones exactas de las librerías están en `requirements.lock`. Los datos y las salidas se montan como volúmenes (no van dentro de la imagen):
 
+> **Estado de la prueba:** se construyó y ejecutó en macOS con Docker Desktop 28.5.1 (`SKIP_BARRIDO=1`), sobre una copia de los datos ya descargados: terminó sin errores y generó los datos procesados y los gráficos de los notebooks 00 a 05. **No se probaron** dentro del contenedor la descarga desde cero, el barrido de sensibilidad ni el notebook 06 (aunque usan el mismo código que se corrió fuera).
+
 ```bash
 docker build -t fraude-sube .
 docker run --rm -v "$PWD/data:/app/data" -v "$PWD/outputs:/app/outputs" -v "$PWD/notebooks:/app/notebooks" fraude-sube

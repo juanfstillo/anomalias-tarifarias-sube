@@ -1,0 +1,46 @@
+# Parámetros de la Fase 2 (simulación). Todo lo de acá es SUPUESTO, no dato.
+semilla: 42
+
+panel:
+  min_dias: 25            # meses con menos días de dato se descartan (p. ej. mes en curso)
+
+secciones:
+  limites_km: [0, 3, 6, 12, 27]            # 5 secciones; la última es abierta (>27 km)
+  tarifa_relativa: [1.00, 1.12, 1.25, 1.37, 1.50]   # ilustrativa, relativa a la sección 1
+  punto_medio_km: [1.5, 4.5, 9.0, 19.5, 35.0]       # para "distancia media abonada"
+
+distancia_viaje:          # modelo lognormal truncado al largo del recorrido (NO calibrado con matriz OD)
+  mediana_ref_km: 4.5     # mediana del viaje en una línea de largo_ref_km
+  largo_ref_km: 15.0
+  elasticidad_largo: 0.5  # la mediana crece con el largo^elasticidad
+  sigma_log: 0.75
+  efecto_linea_sd: 0.15   # heterogeneidad estable entre líneas (log)
+  ruido_mensual_sd: 0.02  # variación mes a mes (log)
+
+fraude:
+  proporcion_lineas: 0.10   # objetivo; se arma eligiendo empresas completas (la orden vendría de la empresa)
+  tolerancia: 0.02          # el % real de líneas puede desviarse hasta esto
+  inicio: "2026-01-01"
+  magnitud: 0.20            # fracción de viajes de secciones bajas que se corre hacia arriba
+  secciones_origen_max: 2   # "bajas" = secciones 1..2
+  salto_secciones: 2        # cuántas secciones se sube el viaje corrido
+  rampa_meses: 0            # 0 = salto inmediato; n = llega a la magnitud plena en n meses
+
+subsidio:
+  bolsa_mensual: 100.0      # bolsa fija en unidades arbitrarias; se mide todo como % de la bolsa
+  regla: proporcional_recaudacion   # cada empresa recibe bolsa × recaudación_e / Σ recaudación
+
+micro:                      # Método 05: microdatos simulados de validaciones (subconjunto de líneas ficticias)
+  n_lineas: 24
+  n_lineas_fraude: 6        # 25 % (más que el 10 % del panel, para tener casos suficientes en un subconjunto chico)
+  tarjetas_por_linea: 150
+  dias_mes_media: 12        # días de uso por tarjeta y mes (Poisson)
+  espaciado_paradas_km: 0.35
+  desde: "2025-07-01"       # 6 meses sin fraude + 6 con fraude (ene-jun 2026)
+  hasta: "2026-06-01"
+  prob_viaje_unico: 0.08    # día con una sola validación: no se puede encadenar (GCBA: 7,9 %)
+  perdida_inferencia: 0.25  # validaciones que no se pueden usar (GPS, destino lejano, simultáneas; GCBA: 27,5 % en total)
+  prob_desplazamiento: [0.2, 0.6, 0.2]   # la parada donde se sube en la vuelta: una antes, la misma, una después
+  prob_error_gps: 0.10      # la parada observada de subida se corre una parada
+  error_operativo: 0.03     # el chofer marca una sección de más o de menos al azar (ruido simétrico)
+  ruido_mes_sd: 0.03        # variación mensual de la distancia típica de los viajes de la línea (log)

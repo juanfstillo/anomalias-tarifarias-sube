@@ -1,0 +1,13 @@
+pandas
+numpy
+geopandas
+shapely
+pyogrio
+pyarrow
+matplotlib
+seaborn
+ruptures
+statsmodels
+scikit-learn
+pyyaml
+jupyter
